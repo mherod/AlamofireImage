@@ -205,7 +205,7 @@ extension UIImageView {
         progressQueue: DispatchQueue = DispatchQueue.main,
         imageTransition: ImageTransition = .noTransition,
         runImageTransitionIfCached: Bool = false,
-        completion: ((Response<UIImage, NSError>) -> Void)? = nil)
+        completion: ((Response<UIImage>) -> Void)? = nil)
     {
         af_setImage(
             withURLRequest: urlRequest(with: url),
@@ -215,7 +215,7 @@ extension UIImageView {
             progressQueue: progressQueue,
             imageTransition: imageTransition,
             runImageTransitionIfCached: runImageTransitionIfCached,
-            completion: completion
+            completion: completion!
         )
     }
 
@@ -258,7 +258,7 @@ extension UIImageView {
         progressQueue: DispatchQueue = DispatchQueue.main,
         imageTransition: ImageTransition = .noTransition,
         runImageTransitionIfCached: Bool = false,
-        completion: ((Response<UIImage, NSError>) -> Void)? = nil)
+        completion: ((Response<UIImage>) -> Void? ))
     {
         guard !isURLRequestURLEqualToActiveRequestURL(urlRequest) else { return }
 
@@ -269,14 +269,14 @@ extension UIImageView {
 
         // Use the image from the image cache if it exists
         if let image = imageCache?.image(for: urlRequest.urlRequest, withIdentifier: filter?.identifier) {
-            let response = Response<UIImage, NSError>(
+            let response = Response<UIImage>(
                 request: urlRequest.urlRequest,
                 response: nil,
                 data: nil,
                 result: .success(image)
             )
 
-            completion?(response)
+            completion(response)
 
             if runImageTransitionIfCached {
                 let tinyDelay = DispatchTime.now() + Double(Int64(0.001 * Float(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
@@ -308,7 +308,7 @@ extension UIImageView {
             completion: { [weak self] response in
                 guard let strongSelf = self else { return }
 
-                completion?(response)
+                completion(response)
 
                 guard
                     strongSelf.isURLRequestURLEqualToActiveRequestURL(response.request) &&
