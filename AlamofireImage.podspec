@@ -25,4 +25,6 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '2.0'
 
   s.dependency 'Alamofire', '4.0.0-beta.2'
+
+  s.pod_target_xcconfig = { 'SWIFT_VERSION' => '3.0' }
 end
