@@ -36,7 +36,7 @@ class UIImageTestCase: BaseTestCase {
     var rainbowImage: UIImage { return image(forResource: "rainbow", withExtension: "jpg") }
     var unicornImage: UIImage { return image(forResource: "unicorn", withExtension: "png") }
 
-    let scale = Int(round(UIScreen.main.scale))
+    let scale = Int(UIScreen.main.scale.rounded())
 
     let squareSize = CGSize(width: 50, height: 50)
     let horizontalRectangularSize = CGSize(width: 60, height: 30)
@@ -51,7 +51,7 @@ class UIImageTestCase: BaseTestCase {
 
         let lock = NSLock()
         var images: [UIImage?] = []
-        let totalIterations = 1_500
+        let totalIterations = 200
 
         // When
         for _ in 0..<totalIterations {
@@ -73,9 +73,7 @@ class UIImageTestCase: BaseTestCase {
         waitForExpectations(timeout: timeout, handler: nil)
 
         // Then
-        images.forEach {
-            XCTAssertNotNil($0, "image should not be nil")
-        }
+        images.forEach { XCTAssertNotNil($0, "image should not be nil") }
     }
 
     func testThatHundredsOfLargeImagesCanBeInitializedAcrossMultipleThreadsWithThreadSafeInitializers() {
@@ -85,7 +83,7 @@ class UIImageTestCase: BaseTestCase {
 
         let lock = NSLock()
         var images: [UIImage?] = []
-        let totalIterations = 1_500
+        let totalIterations = 200
 
         // When
         for _ in 0..<totalIterations {
@@ -107,9 +105,7 @@ class UIImageTestCase: BaseTestCase {
         waitForExpectations(timeout: timeout, handler: nil)
 
         // Then
-        images.forEach {
-            XCTAssertNotNil($0, "image should not be nil")
-        }
+        images.forEach { XCTAssertNotNil($0, "image should not be nil") }
     }
 
     // MARK: - Inflation Tests
@@ -164,8 +160,8 @@ class UIImageTestCase: BaseTestCase {
 
     private func executeImageScaledToSizeTest(_ size: CGSize) {
         // Given
-        let w = Int(round(size.width))
-        let h = Int(round(size.height))
+        let w = Int(size.width.rounded())
+        let h = Int(size.height.rounded())
 
         // When
         let scaledAppleImage = appleImage.af_imageScaled(to: size)
@@ -204,8 +200,8 @@ class UIImageTestCase: BaseTestCase {
 
     private func executeImageAspectScaledToFitSizeTest(_ size: CGSize) {
         // Given
-        let w = Int(round(size.width))
-        let h = Int(round(size.height))
+        let w = Int(size.width.rounded())
+        let h = Int(size.height.rounded())
 
         // When
         let scaledAppleImage = appleImage.af_imageAspectScaled(toFit: size)
@@ -244,8 +240,8 @@ class UIImageTestCase: BaseTestCase {
 
     private func executeImageAspectScaledToFillSizeTest(_ size: CGSize) {
         // Given
-        let w = Int(round(size.width))
-        let h = Int(round(size.height))
+        let w = Int(size.width.rounded())
+        let h = Int(size.height.rounded())
 
         // When
         let scaledAppleImage = appleImage.af_imageAspectScaled(toFill: size)
@@ -275,7 +271,7 @@ class UIImageTestCase: BaseTestCase {
     func testThatImageCornersAreRoundedToRadius() {
         // Given
         let radius: CGFloat = 20
-        let r = Int(round(radius))
+        let r = Int(radius.rounded())
 
         // When
         let roundedAppleImage = appleImage.af_imageRounded(withCornerRadius: radius, divideRadiusByImageScale: true)
